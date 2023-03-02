@@ -155,9 +155,9 @@
 
           if(optionImage) {
             if(optionSelected){
-              optionImage.classList.add('active')
+              optionImage.classList.add('active');
             } else {
-              optionImage.classList.remove('active')
+              optionImage.classList.remove('active');
             }
           }
         }
