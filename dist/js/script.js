@@ -224,7 +224,7 @@
         params[paramId] = {
           label: param.label,
           options: {}
-        }
+        };
 
         for(let optionId in param.options) {
           const option = param.options[optionId];
@@ -234,7 +234,6 @@
           }
         }
       }
-      console.log(params)
       return params;
     }
   }
