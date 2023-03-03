@@ -63,8 +63,8 @@
       thisProduct.getElements();
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
-      thisProduct.processOrder();
       thisProduct.initAmountWidget();
+      thisProduct.processOrder();
     }
     getElements(){
       const thisProduct = this;
@@ -133,6 +133,9 @@
       const thisProduct = this;
 
       thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function(){
+        thisProduct.processOrder();
+      });
     }
     processOrder(){
       const thisProduct = this;
@@ -166,7 +169,7 @@
           }
         }
       }
-
+      price *= thisProduct.amountWidget.value;
       thisProduct.priceElem.innerHTML = price;
     }
   }
@@ -176,7 +179,7 @@
       const thisWidget = this;
 
       thisWidget.getElements(element);
-      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.setValue(settings.amountWidget.defaultValue);
       thisWidget.initActions();
     }
     getElements(element){
@@ -186,17 +189,17 @@
       thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
       thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
       thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
-
-      this.setValue(thisWidget.input.value);
     }
     setValue(value){
       const thisWidget = this;
       const newValue = parseInt(value);
-      if(!isNaN(newValue) && thisWidget.value !== newValue){
+      if(thisWidget.value !== newValue && !isNaN(newValue) && settings.amountWidget.defaultMin <= newValue && settings.amountWidget.defaultMax >= newValue){
         thisWidget.value = newValue;
+        thisWidget.input.value = thisWidget.value;
+        thisWidget.announce();
+      }else{
+        thisWidget.input.value = thisWidget.value;
       }
-      thisWidget.value = newValue;
-      thisWidget.input.value = thisWidget.value;
     }
     initActions(){
       const thisWidget = this;
@@ -206,21 +209,20 @@
       });
       thisWidget.linkDecrease.addEventListener('click', function(event){
         event.preventDefault();
-        if(settings.amountWidget.defaultMin > parseInt(thisWidget.input.value) -1)
-          thisWidget.setValue(thisWidget.input.value);
-        else
-          thisWidget.setValue(--thisWidget.input.value);
+        thisWidget.setValue(--thisWidget.input.value);
       });
       thisWidget.linkIncrease.addEventListener('click', function(event){
         event.preventDefault();
-        if(settings.amountWidget.defaultMax < parseInt(thisWidget.input.value) +1)
-          thisWidget.setValue(thisWidget.input.value);
-        else
-          thisWidget.setValue(++thisWidget.input.value);
+        thisWidget.setValue(++thisWidget.input.value);
       });
     }
-  }
+    announce(){
+      const thisWidget = this;
 
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
+  }
 
   const app = {
     initMenu: function(){
