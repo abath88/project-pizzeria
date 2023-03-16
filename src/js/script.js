@@ -346,7 +346,7 @@
     update(){
       const thisCart = this;
 
-      const deliveryFee = settings.cart.defaultDeliveryFee;
+      const deliveryFee = thisCart.products.length ? settings.cart.defaultDeliveryFee : 0;
       let subtotalPrice = 0;  
 
       for(let product of thisCart.products){
