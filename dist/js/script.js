@@ -36,7 +36,6 @@
     cart: {
       productList: '.cart__order-summary',
       toggleTrigger: '.cart__summary',
-      totalNumber: `.cart__total-number`,
       totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
       subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
       deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
@@ -313,7 +312,6 @@
       thisCart.dom.deliveryFee = thisCart.dom.wrapper.querySelector(select.cart.deliveryFee);
       thisCart.dom.subtotalPrice = thisCart.dom.wrapper.querySelector(select.cart.subtotalPrice);
       thisCart.dom.totalPrice = thisCart.dom.wrapper.querySelectorAll(select.cart.totalPrice);
-      thisCart.dom.totalNumber = thisCart.dom.wrapper.querySelector(select.cart.totalNumber);
       thisCart.dom.form = thisCart.dom.wrapper.querySelector(select.cart.form);
       thisCart.dom.address = thisCart.dom.wrapper.querySelector(select.cart.address);
       thisCart.dom.phone = thisCart.dom.wrapper.querySelector(select.cart.phone);
@@ -354,6 +352,8 @@
       for(let product of thisCart.products){
         subtotalPrice += product.price;
       }
+
+      thisCart.subtotalPrice = subtotalPrice;
       
       if(thisCart.products.length){
         thisCart.totalPrice = subtotalPrice + deliveryFee;
@@ -382,20 +382,14 @@
       const thisCart = this;
 
       const url = settings.db.url + '/' + settings.db.orders;
-      
       const payload = {
         address: thisCart.dom.address.value,
         phone: thisCart.dom.phone.value,
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
-        totalNumber: thisCart.totalNumber,
-        deliveryFee: thisCart.deliveryFee,
-        products: []
+        deliveryFee: settings.cart.defaultDeliveryFee,
+        products: thisCart.products.map(el => el.getData())
       };
-
-      for(let prod of thisCart.products) {
-        payload.products.push(prod.getData());
-      }
 
       const options = {
         method: 'POST',
