@@ -346,7 +346,7 @@
     update(){
       const thisCart = this;
 
-      const deliveryFee = thisCart.products.length ? settings.cart.defaultDeliveryFee : 0;
+      thisCart.deliveryFee = thisCart.products.length ? settings.cart.defaultDeliveryFee : 0;
       let subtotalPrice = 0;
       thisCart.totalNumber = 0;  
 
@@ -356,15 +356,10 @@
       }
 
       thisCart.subtotalPrice = subtotalPrice;
-      
-      if(thisCart.products.length){
-        thisCart.totalPrice = subtotalPrice + deliveryFee;
-      } else{
-        thisCart.totalPrice = 0;
-      }
+      thisCart.totalPrice = subtotalPrice + thisCart.deliveryFee;
 
       thisCart.dom.subtotalPrice.textContent = subtotalPrice;
-      thisCart.dom.deliveryFee.textContent = deliveryFee;
+      thisCart.dom.deliveryFee.textContent = thisCart.deliveryFee;
       for(let totalPriceDOM of thisCart.dom.totalPrice){
         totalPriceDOM.textContent = thisCart.totalPrice;
       }
@@ -390,7 +385,7 @@
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
         totalNumber: thisCart.totalNumber,
-        deliveryFee: settings.cart.defaultDeliveryFee,
+        deliveryFee: thisCart.deliveryFee,
         products: thisCart.products.map(el => el.getData())
       };
 

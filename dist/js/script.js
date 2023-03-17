@@ -346,23 +346,20 @@
     update(){
       const thisCart = this;
 
-      const deliveryFee = settings.cart.defaultDeliveryFee;
-      let subtotalPrice = 0;  
+      thisCart.deliveryFee = thisCart.products.length ? settings.cart.defaultDeliveryFee : 0;
+      let subtotalPrice = 0;
+      thisCart.totalNumber = 0;  
 
       for(let product of thisCart.products){
         subtotalPrice += product.price;
+        thisCart.totalNumber += product.amount;
       }
 
       thisCart.subtotalPrice = subtotalPrice;
-      
-      if(thisCart.products.length){
-        thisCart.totalPrice = subtotalPrice + deliveryFee;
-      } else{
-        thisCart.totalPrice = 0;
-      }
+      thisCart.totalPrice = subtotalPrice + thisCart.deliveryFee;
 
       thisCart.dom.subtotalPrice.textContent = subtotalPrice;
-      thisCart.dom.deliveryFee.textContent = deliveryFee;
+      thisCart.dom.deliveryFee.textContent = thisCart.deliveryFee;
       for(let totalPriceDOM of thisCart.dom.totalPrice){
         totalPriceDOM.textContent = thisCart.totalPrice;
       }
@@ -387,7 +384,8 @@
         phone: thisCart.dom.phone.value,
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
-        deliveryFee: settings.cart.defaultDeliveryFee,
+        totalNumber: thisCart.totalNumber,
+        deliveryFee: thisCart.deliveryFee,
         products: thisCart.products.map(el => el.getData())
       };
 
