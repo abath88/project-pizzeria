@@ -347,10 +347,12 @@
       const thisCart = this;
 
       const deliveryFee = thisCart.products.length ? settings.cart.defaultDeliveryFee : 0;
-      let subtotalPrice = 0;  
+      let subtotalPrice = 0;
+      thisCart.totalNumber = 0;  
 
       for(let product of thisCart.products){
         subtotalPrice += product.price;
+        thisCart.totalNumber += product.amount;
       }
 
       thisCart.subtotalPrice = subtotalPrice;
@@ -387,6 +389,7 @@
         phone: thisCart.dom.phone.value,
         totalPrice: thisCart.totalPrice,
         subtotalPrice: thisCart.subtotalPrice,
+        totalNumber: thisCart.totalNumber,
         deliveryFee: settings.cart.defaultDeliveryFee,
         products: thisCart.products.map(el => el.getData())
       };
