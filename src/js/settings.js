@@ -98,6 +98,7 @@ export const settings = {
   hours: {
     open: 12,
     close: 24,
+    step: 0.5
   },
   datePicker: {
     maxDaysInFuture: 14,
@@ -109,7 +110,8 @@ export const settings = {
     url: '//localhost:3131',
     products: 'products',
     orders: 'orders',
-    event: 'event',
+    events: 'events',
+    bookings: 'bookings',
     dateStartParamKey: 'date_gte',
     dateEndParamKey: 'date_lte',
     notRepeatParam: 'repeat=false',

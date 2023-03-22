@@ -9,14 +9,19 @@ class HourPicker extends BaseWidget{
     thisWidget.dom.input = thisWidget.dom.wrapper.querySelector(select.widgets.hourPicker.input);
     thisWidget.dom.output = thisWidget.dom.wrapper.querySelector(select.widgets.hourPicker.output);
     thisWidget.initPlugin();
-    thisWidget.value = thisWidget.dom.input.value;
+    thisWidget.value = settings.hours.open;
   }
   initPlugin(){
     const thisWidget = this;
     // eslint-disable-next-line no-undef
-    rangeSlider.create(thisWidget.dom.input);
-    thisWidget.dom.input.addEventListener('input', function(){
-      thisWidget.value = thisWidget.dom.input.value;
+    rangeSlider.create(thisWidget.dom.input, {
+      min: settings.hours.open,
+      max: settings.hours.close,
+      step: settings.hours.step,
+      value: thisWidget.value,
+      onSlide: function (position) {
+        thisWidget.value = position;
+      },
     });
   }
   parseValue(value){
