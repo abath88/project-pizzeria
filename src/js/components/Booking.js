@@ -215,7 +215,14 @@ class Booking {
       body: JSON.stringify(payload),
     };
     
-    fetch(url, options);
+    fetch(url, options)
+      .then(function(){
+        console.log(payload.hour);
+        console.log(thisBooking.booked[payload.date]);
+        thisBooking.booked[payload.date][utils.hourToNumber(thisBooking.hourPicker.value)].push(payload.table);
+        thisBooking.resetSelectedTable();
+        thisBooking.updateDOM();
+      });
   }
   initWidget(){
     const thisBooking = this;
