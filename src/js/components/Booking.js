@@ -218,7 +218,7 @@ class Booking {
     
     fetch(url, options)
       .then(function(){
-        thisBooking.makeBooked(payload.date, utils.hourToNumber(payload.hour), payload.duration, payload.table);
+        thisBooking.makeBooked(payload.date, payload.hour, payload.duration, payload.table);
       });
   }
   initWidget(){
