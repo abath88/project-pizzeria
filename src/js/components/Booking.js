@@ -218,8 +218,7 @@ class Booking {
     
     fetch(url, options)
       .then(function(){
-        thisBooking.booked[payload.date][utils.hourToNumber(payload.hour)].push(payload.table);
-        thisBooking.updateDOM();
+        thisBooking.makeBooked(payload.date, utils.hourToNumber(payload.hour), payload.duration, payload.table);
       });
   }
   initWidget(){
@@ -235,7 +234,6 @@ class Booking {
     thisBooking.dom.wrapper.addEventListener('click', function(event){
       thisBooking.initTables(event.target);
     });
-    console.log(thisBooking.dom.form);
     thisBooking.dom.form.addEventListener('submit', function(event){
       event.preventDefault();
       if(thisBooking.selectedTable) thisBooking.sendBooking();
