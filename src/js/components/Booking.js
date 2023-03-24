@@ -158,7 +158,7 @@ class Booking {
 
     const selectedTable = thisBooking.dom.wrapper.querySelector('.table.selected');
     if(selectedTable) {
-      selectedTable.classList.remove('selected');
+      selectedTable.classList.remove(classNames.booking.tableSelected);
       thisBooking.selectedTable = null;
     }
 
@@ -167,19 +167,20 @@ class Booking {
     const thisBooking = this;
 
     if(table.classList.contains('table')){
-      if(table.classList.contains('booked')){
+      if(table.classList.contains(classNames.booking.tableBooked)){
         alert('Stolik zajęty');
       }else{
-        if(!table.classList.contains('selected')){
+        if(!table.classList.contains(classNames.booking.tableSelected)){
           thisBooking.resetSelectedTable();
-          table.classList.add('selected');
+          table.classList.add(classNames.booking.tableSelected);
           let tableId = table.getAttribute(settings.booking.tableIdAttribute);
     
           if(!isNaN(tableId)){
             tableId = parseInt(tableId);
+            thisBooking.selectedTable = tableId;
+          }else{
+            thisBooking.selectedTable = null;
           }
-
-          thisBooking.selectedTable = tableId;
         }else {
           thisBooking.resetSelectedTable();
         }
@@ -203,8 +204,8 @@ class Booking {
       'duration': thisBooking.hoursAmount.value,
       'ppl': thisBooking.peopleAmount.value,
       'starters': starters,
-      'phone': thisBooking.dom.phone,
-      'address': thisBooking.dom.address
+      'phone': thisBooking.dom.phone.value,
+      'address': thisBooking.dom.address.value,
     };
 
     const options = {
@@ -217,10 +218,7 @@ class Booking {
     
     fetch(url, options)
       .then(function(){
-        console.log(payload.hour);
-        console.log(thisBooking.booked[payload.date]);
-        thisBooking.booked[payload.date][utils.hourToNumber(thisBooking.hourPicker.value)].push(payload.table);
-        thisBooking.resetSelectedTable();
+        thisBooking.booked[payload.date][utils.hourToNumber(payload.hour)].push(payload.table);
         thisBooking.updateDOM();
       });
   }
